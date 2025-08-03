@@ -1,4 +1,4 @@
--- Freeze Trade GUI: ShinOnTop Edition (Pink Style)
+-- Freeze Trade GUI: ShinOnTop Edition (Pink Style + Countdown Visual)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -15,7 +15,7 @@ ScreenGui.ResetOnSpawn = false
 
 -- Main Frame
 local MainFrame = Instance.new("Frame", ScreenGui)
-MainFrame.Size = UDim2.new(0, 400, 0, 280)
+MainFrame.Size = UDim2.new(0, 400, 0, 300)
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -109,6 +109,18 @@ FreezeButton.Font = Enum.Font.GothamBold
 FreezeButton.TextSize = 16
 Instance.new("UICorner", FreezeButton).CornerRadius = UDim.new(0, 8)
 
+-- Trade Frozen Status Visual
+local StatusLabel = Instance.new("TextLabel", MainFrame)
+StatusLabel.Size = UDim2.new(0.9, 0, 0, 25)
+StatusLabel.Position = UDim2.new(0.05, 0, 0, 240)
+StatusLabel.BackgroundColor3 = Color3.fromRGB(255, 230, 240)
+StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 127)
+StatusLabel.Font = Enum.Font.GothamBold
+StatusLabel.TextSize = 14
+StatusLabel.Text = "⚠️ Trade still frozen — Countdown stuck at 0"
+StatusLabel.Visible = false
+Instance.new("UICorner", StatusLabel).CornerRadius = UDim.new(0, 6)
+
 -- Watermark inside MainFrame
 local Watermark = Instance.new("TextLabel", MainFrame)
 Watermark.Text = "Made By: ShinOnTop"
@@ -141,11 +153,22 @@ SearchButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Simulate visual when trade stays frozen
+local function OnPetRemovedWhileFrozen()
+    if StatusLabel then
+        StatusLabel.Visible = true
+        task.delay(3, function()
+            StatusLabel.Visible = false
+        end)
+    end
+end
+
 FreezeButton.MouseButton1Click:Connect(function()
     if targetPlayer then
         warn("Attempted to freeze trade with: " .. targetPlayer.Name)
         FreezeButton.Text = "TRADE FROZEN!"
         FreezeButton.BackgroundColor3 = Color3.fromRGB(255, 70, 150)
+        OnPetRemovedWhileFrozen()
     else
         FreezeButton.Text = "No Player Selected"
         FreezeButton.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
