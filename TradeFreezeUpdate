@@ -1,0 +1,169 @@
+-- Freeze Trade GUI with Avatar Display, Draggable Frame, and Watermark
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- Clean up previous
+if PlayerGui:FindFirstChild("FreezeTradeUI") then
+    PlayerGui.FreezeTradeUI:Destroy()
+end
+
+-- GUI Setup
+local ScreenGui = Instance.new("ScreenGui", PlayerGui)
+ScreenGui.Name = "FreezeTradeUI"
+ScreenGui.ResetOnSpawn = false
+
+local MainFrame = Instance.new("Frame", ScreenGui)
+MainFrame.Size = UDim2.new(0, 350, 0, 310)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(40, 120, 40)
+MainFrame.Active = true
+MainFrame.Draggable = true
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+
+-- Minimize Button
+local MinButton = Instance.new("TextButton", MainFrame)
+MinButton.Text = "-"
+MinButton.Size = UDim2.new(0, 30, 0, 30)
+MinButton.Position = UDim2.new(1, -35, 0, 5)
+MinButton.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
+MinButton.TextColor3 = Color3.new(1, 1, 1)
+MinButton.Font = Enum.Font.GothamBold
+MinButton.TextSize = 18
+Instance.new("UICorner", MinButton).CornerRadius = UDim.new(0, 6)
+
+-- Title
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Text = "🌱 Freeze Trade"
+Title.Size = UDim2.new(1, -40, 0, 40)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+-- Instruction Label
+local SearchLabel = Instance.new("TextLabel", MainFrame)
+SearchLabel.Text = "Find Player to Freeze Trade"
+SearchLabel.Position = UDim2.new(0, 0, 0, 45)
+SearchLabel.Size = UDim2.new(1, 0, 0, 25)
+SearchLabel.BackgroundTransparency = 1
+SearchLabel.TextColor3 = Color3.fromRGB(220, 255, 220)
+SearchLabel.Font = Enum.Font.Gotham
+SearchLabel.TextSize = 16
+
+-- Username TextBox
+local UsernameBox = Instance.new("TextBox", MainFrame)
+UsernameBox.PlaceholderText = "Enter username"
+UsernameBox.Position = UDim2.new(0.05, 0, 0, 80)
+UsernameBox.Size = UDim2.new(0.65, 0, 0, 35)
+UsernameBox.Font = Enum.Font.Gotham
+UsernameBox.TextSize = 14
+UsernameBox.TextColor3 = Color3.new(0, 0, 0)
+UsernameBox.BackgroundColor3 = Color3.fromRGB(230, 255, 230)
+Instance.new("UICorner", UsernameBox).CornerRadius = UDim.new(0, 6)
+
+-- Search Button
+local SearchButton = Instance.new("TextButton", MainFrame)
+SearchButton.Text = "Search"
+SearchButton.Position = UDim2.new(0.72, 0, 0, 80)
+SearchButton.Size = UDim2.new(0.23, 0, 0, 35)
+SearchButton.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
+SearchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SearchButton.Font = Enum.Font.GothamBold
+SearchButton.TextSize = 14
+Instance.new("UICorner", SearchButton).CornerRadius = UDim.new(0, 6)
+
+-- Player Found Label
+local FoundLabel = Instance.new("TextLabel", MainFrame)
+FoundLabel.Position = UDim2.new(0.05, 0, 0, 130)
+FoundLabel.Size = UDim2.new(0.65, 0, 0, 30)
+FoundLabel.Text = ""
+FoundLabel.BackgroundColor3 = Color3.fromRGB(230, 255, 230)
+FoundLabel.TextColor3 = Color3.fromRGB(40, 120, 40)
+FoundLabel.Font = Enum.Font.GothamBold
+FoundLabel.TextSize = 16
+FoundLabel.Visible = false
+Instance.new("UICorner", FoundLabel).CornerRadius = UDim.new(0, 6)
+
+-- Avatar Image
+local AvatarImage = Instance.new("ImageLabel", MainFrame)
+AvatarImage.Position = UDim2.new(0.72, 0, 0, 130)
+AvatarImage.Size = UDim2.new(0.23, 0, 0, 30)
+AvatarImage.BackgroundTransparency = 1
+AvatarImage.Visible = false
+AvatarImage.ScaleType = Enum.ScaleType.Fit
+
+-- Freeze Button
+local FreezeButton = Instance.new("TextButton", MainFrame)
+FreezeButton.Text = "FREEZE TRADE"
+FreezeButton.Position = UDim2.new(0.05, 0, 0, 180)
+FreezeButton.Size = UDim2.new(0.9, 0, 0, 45)
+FreezeButton.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
+FreezeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+FreezeButton.Font = Enum.Font.GothamBold
+FreezeButton.TextSize = 16
+Instance.new("UICorner", FreezeButton).CornerRadius = UDim.new(0, 8)
+
+-- Watermark
+local Watermark = Instance.new("TextLabel", ScreenGui)
+Watermark.Text = "Made By: ShinOnTop"
+Watermark.Size = UDim2.new(0, 200, 0, 20)
+Watermark.Position = UDim2.new(1, -210, 1, -30)
+Watermark.AnchorPoint = Vector2.new(0, 0)
+Watermark.BackgroundTransparency = 1
+Watermark.TextColor3 = Color3.new(1, 1, 1)
+Watermark.TextTransparency = 0.4
+Watermark.TextStrokeTransparency = 0.8
+Watermark.Font = Enum.Font.Gotham
+Watermark.TextSize = 14
+Watermark.TextXAlignment = Enum.TextXAlignment.Right
+
+-- Logic
+local targetPlayer = nil
+
+SearchButton.MouseButton1Click:Connect(function()
+    local username = UsernameBox.Text
+    local found = Players:FindFirstChild(username)
+    if found then
+        targetPlayer = found
+        FoundLabel.Text = found.Name
+        FoundLabel.Visible = true
+        AvatarImage.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. found.UserId .. "&width=150&height=150&format=png"
+        AvatarImage.Visible = true
+    else
+        FoundLabel.Text = "Player not found"
+        FoundLabel.Visible = true
+        AvatarImage.Visible = false
+        targetPlayer = nil
+    end
+end)
+
+FreezeButton.MouseButton1Click:Connect(function()
+    if targetPlayer then
+        warn("Attempted to freeze trade with: " .. targetPlayer.Name)
+        FreezeButton.Text = "TRADE FROZEN!"
+        FreezeButton.BackgroundColor3 = Color3.fromRGB(30, 150, 30)
+    else
+        FreezeButton.Text = "No Player Selected"
+        FreezeButton.BackgroundColor3 = Color3.fromRGB(180, 60, 60)
+    end
+    task.delay(2, function()
+        FreezeButton.Text = "FREEZE TRADE"
+        FreezeButton.BackgroundColor3 = Color3.fromRGB(60, 180, 60)
+    end)
+end)
+
+-- Minimize logic
+local minimized = false
+MinButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    for _, child in ipairs(MainFrame:GetChildren()) do
+        if child ~= MinButton and child ~= Title and child:IsA("GuiObject") then
+            child.Visible = not minimized
+        end
+    end
+    MinButton.Text = minimized and "+" or "-"
+end)
